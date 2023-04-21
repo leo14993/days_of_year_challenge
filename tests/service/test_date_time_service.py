@@ -100,6 +100,55 @@ class TestDateTimeService(unittest.IsolatedAsyncioTestCase):
 
 
 
+    def test_verify_date_params_type_when_all_params_is_numeric_then_returns_true(self):
+        # Arrange
+        input_string = '2019-09-14'
+        split_input_string = input_string.split('-')
+
+        #Act / Assert
+        self.assertTrue(self.date_time_service.verify_date_params_type(split_input_string))
+
+    def test_verify_date_params_type_when_one_of_params_is_not_numeric_then_returns_false(self):
+        # Arrange
+        input_string = '2019-setembro-14'
+        split_input_string = input_string.split('-')
+
+        # Act / Assert
+        self.assertFalse(self.date_time_service.verify_date_params_type(split_input_string))
+
+
+    def test_is_a_valid_day_when_is_valid_then_returns_true(self):
+        # Arrange
+
+        dates = [
+            (2019, 9, 14),
+            (2019, 2, 28),
+            (2020, 2, 29),
+            (0, 2, 29),
+            (5001, 8, 31),
+            (5001, 7, 31),
+        ]
+
+        # Act / Assert
+        for date in dates:
+            self.assertTrue(self.date_time_service.is_a_valid_day(date[0], date[1], date[2]))
+
+    def test_is_not_a_valid_day_when_is_valid_then_returns_false(self):
+        # Arrange
+        dates = [
+            (2019, 9, 45),
+            (2019, 2, 29),
+            (2020, 2, 30),
+            (0, 2, 31),
+            (1500, 1, 32),
+            (1500, 12, 32),
+            (5001, 6, 31),
+        ]
+
+        # Act / Assert
+        for date in dates:
+            self.assertFalse(self.date_time_service.is_a_valid_day(date[0], date[1], date[2]))
+
     @mock.patch(f'{DATE_TIME_SERVICE_PATH}.DateService.datetime_string_has_all_params')
     def test_validate_datetime_values_when_string_have_not_all_date_params_then_returns_false(self,
                                                                                               datetime_string_has_all_params_mock: MagicMock):
@@ -123,3 +172,4 @@ class TestDateTimeService(unittest.IsolatedAsyncioTestCase):
         # Act / Assert
         self.assertTrue(self.date_time_service.validate_datetime_values(input_string))
         datetime_string_has_all_params_mock.assert_called_once_with(split_input_string)
+
