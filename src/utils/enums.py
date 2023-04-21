@@ -24,7 +24,7 @@ class MonthDays:
 YEAR_MONTHS = list(range(1, 13))
 
 
-class Year:
+class Month:
     JANUARY = 1
     FEBRUARY = 2
     MARCH = 3
@@ -40,16 +40,16 @@ class Year:
 
 
 MONTH_DAYS_ALIAS = {
-    Year.JANUARY: MonthDays.JANUARY,
-    Year.FEBRUARY: MonthDays.FEBRUARY,
-    Year.MARCH: MonthDays.MARCH,
-    Year.APRIL: MonthDays.APRIL,
-    Year.MAY: MonthDays.MAY,
-    Year.JUNE: MonthDays.JUNE,
-    Year.JULY: MonthDays.JULY,
-    Year.AUGUST: MonthDays.AUGUST,
-    Year.SEPTEMBER: MonthDays.SEPTEMBER,
-    Year.OCTOBER: MonthDays.OCTOBER,
-    Year.NOVEMBER: MonthDays.NOVEMBER,
-    Year.DECEMBER: MonthDays.DECEMBER,
+    Month.JANUARY: MonthDays.JANUARY,
+    Month.FEBRUARY: MonthDays.FEBRUARY,
+    Month.MARCH: MonthDays.MARCH,
+    Month.APRIL: MonthDays.APRIL,
+    Month.MAY: MonthDays.MAY,
+    Month.JUNE: MonthDays.JUNE,
+    Month.JULY: MonthDays.JULY,
+    Month.AUGUST: MonthDays.AUGUST,
+    Month.SEPTEMBER: MonthDays.SEPTEMBER,
+    Month.OCTOBER: MonthDays.OCTOBER,
+    Month.NOVEMBER: MonthDays.NOVEMBER,
+    Month.DECEMBER: MonthDays.DECEMBER,
 }

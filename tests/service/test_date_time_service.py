@@ -1,5 +1,4 @@
 import unittest
-from datetime import datetime
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -14,20 +13,55 @@ DATE_TIME_SERVICE_PATH = 'src.service.date_time_service'
 class TestDateTimeService(unittest.IsolatedAsyncioTestCase):
     date_time_service: DateService = inject.instance(DateService)
 
-    @mock.patch(f'{DATE_TIME_SERVICE_PATH}.DateService.validate_datetime_string')
-    def test_validate_date_time_when_string_is_a_valid_datetime_then_return_converted_datetime(self,
-                                                                                               validate_datetime_string_mock: MagicMock):
+    def test_get_what_is_the_day_of_the_year_when_is_valid_date_teh_returns_number_of_day(self):
         # Arrange
-        input_string = '2019-09-14'
-        validate_datetime_string_mock.return_value = True
-        expected_datetime = datetime.strptime(input_string, self.date_time_service.date_format).date()
+        input_string = '2019-01-15'
+        expected_number = 15
+
 
         # Act
-        validated_date_time = self.date_time_service.get_datetime_by_string(input_string)
+        number_of_day = self.date_time_service.get_what_is_the_day_of_year(input_string)
 
         # Assert
-        assert validated_date_time == expected_datetime
-        validate_datetime_string_mock.assert_called_once_with(input_string)
+        assert expected_number == number_of_day
+
+
+    def test_get_what_is_the_day_of_the_year_when_is_valid_date_teh_returns_number_of_day2(self):
+        # Arrange
+        input_string = '2019-02-15'
+        expected_number = 46
+
+
+        # Act
+        number_of_day = self.date_time_service.get_what_is_the_day_of_year(input_string)
+
+        # Assert
+        assert expected_number == number_of_day
+
+
+    def test_get_what_is_the_day_of_the_year_when_is_valid_date_teh_returns_number_of_day3(self):
+        # Arrange
+        input_string = '2020-03-12'
+        expected_number = 72
+
+
+        # Act
+        number_of_day = self.date_time_service.get_what_is_the_day_of_year(input_string)
+
+        # Assert
+        assert expected_number == number_of_day
+
+    def test_get_what_is_the_day_of_the_year_when_is_valid_date_teh_returns_number_of_day4(self):
+        # Arrange
+        input_string = '2020-12-29'
+        expected_number = 364
+
+
+        # Act
+        number_of_day = self.date_time_service.get_what_is_the_day_of_year(input_string)
+
+        # Assert
+        assert expected_number == number_of_day
 
     @mock.patch(f'{DATE_TIME_SERVICE_PATH}.DateService.validate_datetime_string')
     def test_validate_date_time_when_string_is_not_valid_datetime_then_raise_invalid_data_exception(self,
@@ -38,7 +72,7 @@ class TestDateTimeService(unittest.IsolatedAsyncioTestCase):
 
         # Act/Assert
         with self.assertRaises(InvalidDataException):
-            self.date_time_service.get_datetime_by_string(input_string)
+            self.date_time_service.get_what_is_the_day_of_year(input_string)
 
         validate_datetime_string_mock.assert_called_once_with(input_string)
 

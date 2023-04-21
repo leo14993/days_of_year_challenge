@@ -1,17 +1,35 @@
 from datetime import datetime, date
-from typing import List
+from typing import List, Optional
 
-from src.utils.enums import YEAR_MONTHS, MonthDays, Year, MONTH_DAYS_ALIAS
+from src.utils.enums import YEAR_MONTHS, MonthDays, Month, MONTH_DAYS_ALIAS
 from src.utils.exceptions import InvalidDataException
 
 
 class DateService:
-    date_format = '%Y-%m-%d'
+    date_format: str = '%Y-%m-%d'
+    year: Optional[int] = None
+    month: Optional[int] = None
+    day: Optional[int] = None
+    leap_year: bool = False
 
-    def get_datetime_by_string(self, string_date: str) -> date:
+    def get_what_is_the_day_of_year(self, string_date: str) -> int:
         if not self.validate_datetime_string(string_date):
             raise InvalidDataException
-        return datetime.strptime(string_date, self.date_format).date()
+
+        if self.month == Month.JANUARY:
+            return self.day
+
+        day = 0
+        for month in range(Month.JANUARY, self.month):
+            if month == Month.FEBRUARY and self.leap_year:
+                day += MonthDays.LEAP_FEBRUARY
+                continue
+
+            day += MONTH_DAYS_ALIAS[month]
+
+        day += self.day
+
+        return day
 
     def validate_datetime_string(self, string_date: str) -> bool:
         if not isinstance(string_date, str):
@@ -26,7 +44,7 @@ class DateService:
         return all(list(map(lambda i: i.isnumeric(), split_string_date)))
 
     def is_a_valid_day(self, year: int, month: int, day: int) -> bool:
-        if month == Year.FEBRUARY:
+        if month == Month.FEBRUARY:
             if MonthDays.is_leap_year(year):
                 return day <= MonthDays.LEAP_FEBRUARY
             return day <= MonthDays.FEBRUARY
@@ -43,14 +61,14 @@ class DateService:
 
         split_string_date = [int(x) for x in split_string_date]
 
-        year = split_string_date[0]
-        month = split_string_date[1]
-        day = split_string_date[2]
+        self.year = split_string_date[0]
+        self.month = split_string_date[1]
+        self.day = split_string_date[2]
 
-        if month not in YEAR_MONTHS:
+        self.leap_year = MonthDays.is_leap_year(self.year)
+
+        if self.month not in YEAR_MONTHS:
             return False
 
-        if not self.is_a_valid_day(year, month, day):
-            return False
+        return self.is_a_valid_day(self.year, self.month, self.day)
 
-        return True
